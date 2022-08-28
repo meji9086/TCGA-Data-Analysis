@@ -1,3 +1,8 @@
+get_ipython().system('pip install pandas')
+get_ipython().system('pip install sklearn')
+get_ipython().system('pip install lightgbm')
+get_ipython().system('pip install xgboost')
+
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
