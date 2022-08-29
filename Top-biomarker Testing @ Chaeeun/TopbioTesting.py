@@ -10,7 +10,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.neural_network import MLPClassifier
 
-
 def Parameter_Model(model_parameter=None):
     
     method = ''.join([i for i in model_parameter.keys()])
@@ -32,7 +31,6 @@ def Parameter_Model(model_parameter=None):
             parameter = params
         model = MLPClassifier(**parameter)
     return model, method      
-
 
 def Topbio_test(df, ranking_df, methods, step, model_parameter):
     # model parameter 
