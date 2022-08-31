@@ -52,11 +52,29 @@ def biomarker_rank(data, models):
             else :
                 param = parameter
             model = AdaBoostClassifier(**param)  
+            
+        elif method == 'GB':
+            if parameter == 'default':
+                param = {}
+            elif parameter == 'recommended' :
+                param = {}
+            else :
+                param = parameter
+            model = GradientBoostingClassifier(**param) 
+
+        elif method == 'Decision':
+            if parameter == 'default':
+                param = {}
+            elif parameter == 'recommended' :
+                param = {}
+            else :
+                param = parameter
+            model = DecisionTreeClassifier(**param) 
 
         else:
             raise NameError('Error')
 
-        models_final.append(model)
+        models_final.append(model)    
 
     X_features = data.iloc[:, :-1]
     y_target = data.iloc[:, -1]
