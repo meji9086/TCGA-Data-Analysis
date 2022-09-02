@@ -4,7 +4,9 @@
 
  대회 URL : http://dataon-con.kr/pages/about_new.php
 
-## <img scr="https://user-images.githubusercontent.com/72390138/188064850-9b496e84-d3bf-4929-ae16-31ef132d31ba.png"> Team Info.
+![image](https://user-images.githubusercontent.com/72390138/188065531-c11ef887-0b79-4f5e-9846-cc356724dad3.png)
+
+## <img scr="https://user-images.githubusercontent.com/72390138/188065531-c11ef887-0b79-4f5e-9846-cc356724dad3.png" width="50" height="50"> Team Info.
 |이름|역할|
 |:------:|:---:|
 |<span style="color:blue">[김예지](https://github.com/meji9086)</span>|Measurement of Ranking and Feature Importance Using Modeling|
