@@ -52,17 +52,8 @@ def biomarker_rank(data, models):
             else :
                 param = parameter
             model = AdaBoostClassifier(**param)  
-            
-        elif method == 'GB':
-            if parameter == 'default':
-                param = {}
-            elif parameter == 'recommended' :
-                param = {}
-            else :
-                param = parameter
-            model = GradientBoostingClassifier(**param) 
 
-        elif method == 'Decision':
+        elif method == 'DT':
             if parameter == 'default':
                 param = {}
             elif parameter == 'recommended' :
@@ -86,12 +77,12 @@ def biomarker_rank(data, models):
         f_importance = modeling.fit(X_train, Y_train)
         importance = f_importance.feature_importances_    
      
-        biomarker_importance = pd.DataFrame(importance, index=X_train.columns, columns=[f'importances_{method_name[0]}'])
+        biomarker_importance = pd.DataFrame(importance, index=X_train.columns, columns=[f'{method_name[0]}'])
         importance_df = pd.concat([importance_df, biomarker_importance], axis=1)
 
         ranking = pd.DataFrame()
-        ranking[f'ranking_{method_name[0]}'] = importance_df[f'importances_{method_name[0]}'].rank(method='min', ascending=False)
-        ranking = ranking[[f'ranking_{method_name[0]}']].astype('int')
+        ranking[f'{method_name[0]}'] = importance_df[f'{method_name[0]}'].rank(method='min', ascending=False)
+        ranking = ranking[[f'{method_name[0]}']].astype('int')
         ranking_df = pd.concat([ranking_df, ranking], axis=1)
 
     return ranking_df, importance_df
