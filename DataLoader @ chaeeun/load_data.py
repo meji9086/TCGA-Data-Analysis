@@ -1,4 +1,3 @@
-#get_ipython().system('pip install pandas')
 import os
 import pandas as pd
 
