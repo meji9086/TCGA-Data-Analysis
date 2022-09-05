@@ -57,7 +57,7 @@ def biomarker_rank(data, models):
             if parameter == 'default':
                 param = {}
             elif parameter == 'recommended' :
-                param = {}
+                param = {'max_depth': 1, 'min_samples_leaf': 1, 'min_weight_fraction_leaf': 0.0}
             else :
                 param = parameter
             model = DecisionTreeClassifier(**param) 
