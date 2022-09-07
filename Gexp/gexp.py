@@ -20,57 +20,68 @@ def download_data(cancer_list, data_source, data_dir=None):
         path = current_path
     else:
         path = f'{current_path}/{data_dir}'
-
-    data = pd.read_csv(data_source)
+        if os.path.isfile(path):
+            os.mkdir(path)
+        else:
+            pass
+            
+    down_folder = [f.split(".")[0] for f in os.listdir(path) if f != '.ipynb_checkpoints']
     for cancer in cancer_list:
-        link_df = data[data['cancer'] == cancer]
-        link = ''.join(link_df['link'])  
-        local_filename = link.split('/')[-1]
-        with requests.get(link, stream=True) as r:
-            with open(local_filename, 'wb') as f:
-                for chunk in r.iter_content(chunk_size=8192):
-                    f.write(chunk)
-                    shutil.copyfileobj(r.raw, f)
-                    f.close()
-                time.sleep(3)
-       
-        fname = f'./{local_filename}' 
-        ap = tarfile.open(fname)      
-        ap.extractall(path)
-        ap.close()      
-        f = local_filename.rstrip('.tar.gz')
-        entries = os.listdir(f'{path}/{f}')
-        for entry in entries:
-            if cancer in entry:
-                shutil.move(f'{path}/{f}/{entry}', path)
-                shutil.rmtree(f'{path}/{f}')
-        os.remove(f'{fname}')   
+        if cancer in down_folder:
+                print(f'The {cancer} already exists')
+                continue       
+        else:
+            data = pd.read_csv(data_source)
+            link = ''.join(data[data['cancer'] == cancer].loc[:,'link'])
+            local_filename = link.split('/')[-1]
+            with requests.get(link, stream=True) as r:
+                with open(local_filename, 'wb') as f:
+                    for chunk in r.iter_content(chunk_size=8192):
+                        f.write(chunk)
+                        shutil.copyfileobj(r.raw, f)
+                        f.close()
+            while True:
+                if local_filename in os.listdir(current_path):
+                    fname = f'./{local_filename}'   
+                    ap = tarfile.open(fname)    
+                    ap.extractall(path)
+                    ap.close()
+                    #get need data
+                    folder = local_filename.rstrip('.tar.gz')
+                    entries = os.listdir(f'{path}/{folder}')
+                    for entry in entries:
+                        if cancer in entry:
+                            shutil.move(f'{path}/{folder}/{entry}', path)
+                            shutil.rmtree(f'{path}/{folder}')
+                    os.remove(f'{fname}') 
+                else:
+                     break
 
 
 def load_labeled_data(data_dir, label_list, patient_type=None):
     file_list = [f for f in os.listdir(data_dir) if f != '.ipynb_checkpoints']
-
     cancer_df = pd.DataFrame()
     for idx, label in enumerate(label_list):
-        cancer = label.split('_')[1]
+        cancer = label.split('_')[0]
         cancer_txt = "".join([f for f in file_list if f.split('.')[0] == cancer])
         data = pd.read_csv(f'{data_dir}/{cancer_txt}', sep='\t', low_memory=False, index_col='Hybridization REF', skiprows=[1])
         data = data.transpose()
         
-        if cancer == 'BRCA':
-            subtype = label.split('_')[2]
-            sub_file = pd.read_csv(patient_type, sep=',', index_col='Hybridization REF')
-            BRCA = pd.merge(data, sub_file, left_index=True, right_index=True, how='left')
-            BRCA = BRCA[(BRCA['Tumor'] == 'BRCA')&(BRCA['Subtype'].str.lower() == subtype.lower())]
-            data = BRCA.drop(columns = ['Tumor'])
-            
         data['Target'] = data.index.str[13:15]
         data['Target'].replace(['01', '02', '03', '04', '05', '06', '07', '08', '09'], 'Cancer', inplace=True)
         data['Target'].replace(['10', '11', '12', '13', '14', '15', '16', '17', '18', '19'],'Normal', inplace=True)
         data = data[data['Target'].str.contains('Cancer')]
+        
+        if cancer == 'BRCA':
+            subtype = label.split('_')[1]
+            sub_file = pd.read_csv(patient_type, sep=',', index_col='Hybridization REF')
+            BRCA = pd.merge(data, sub_file, left_index=True, right_index=True, how='left')
+            BRCA = BRCA[(BRCA['Tumor'] == 'BRCA')&(BRCA['Subtype'].str.lower() == subtype.lower())]
+            data = BRCA.drop(columns = ['Tumor', 'Subtype'])
 
         data['Target'] = label
         cancer_df = pd.concat([cancer_df, data])
+        print(f'load file : {cancer_txt}')
         
     return cancer_df
 
