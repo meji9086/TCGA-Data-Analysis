@@ -11,12 +11,22 @@ from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
 
-def biomarker_rank(data, models):
-    models_final = []
-    for model in models:
+#model
+from xgboost import XGBClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.neural_network import MLPClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import AdaBoostClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+
+def parameter_model(model_param=None):
+    model_final = [] 
+    model_name = []
+    
+    for model in model_param:
         method = model[0]
         parameter = model[1]
-    
+        
         if method == 'RF':
             if parameter == 'default':
                 param = {}
@@ -62,10 +72,25 @@ def biomarker_rank(data, models):
                 param = parameter
             model = DecisionTreeClassifier(**param) 
 
+        elif method == 'MLP':
+            if parameter == "default":
+                param = {}  
+            elif parameter == "recommended":
+                param = {'activation': 'identity', 'alpha': 0.001, 'hidden_layer_sizes': (400,), 'learning_rate': 'invscaling', 'max_iter': 3000, 'solver': 'adam'}
+            else:
+                parameter = params
+            model = MLPClassifier(**param)
+            
         else:
             raise NameError('Error')
+        
+        model_final.append(model)
+        model_name.append(method)
 
-        models_final.append(model)    
+    return model_final, model_name
+
+def biomarker_rank(data, models):
+    model_final, model_name = parameter_model(models)
 
     X_features = data.iloc[:, :-1]
     y_target = data.iloc[:, -1]
@@ -73,16 +98,16 @@ def biomarker_rank(data, models):
 
     ranking_df = pd.DataFrame()
     importance_df = pd.DataFrame()  
-    for modeling, method_name in zip(models_final, models):
+    for modeling, method_name in zip(model_final, model_name):
         f_importance = modeling.fit(X_train, Y_train)
         importance = f_importance.feature_importances_    
-     
-        biomarker_importance = pd.DataFrame(importance, index=X_train.columns, columns=[f'{method_name[0]}'])
+
+        biomarker_importance = pd.DataFrame(importance, index=X_train.columns, columns=[f'{method_name}'])
         importance_df = pd.concat([importance_df, biomarker_importance], axis=1)
 
         ranking = pd.DataFrame()
-        ranking[f'{method_name[0]}'] = importance_df[f'{method_name[0]}'].rank(method='min', ascending=False)
-        ranking = ranking[[f'{method_name[0]}']].astype('int')
+        ranking[f'{method_name}'] = importance_df[f'{method_name}'].rank(method='min', ascending=False)
+        ranking = ranking[[f'{method_name}']].astype('int')
         ranking_df = pd.concat([ranking_df, ranking], axis=1)
 
     return ranking_df, importance_df
