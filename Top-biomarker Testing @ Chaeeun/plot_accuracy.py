@@ -118,7 +118,11 @@ def plot_stepwise_accuracy(df, ranking_df, step_num, model, accuracy_metric, mul
                 y_proba = model_final.predict_proba(x_test)
                 # accuracy_metric
                 if multi_class == True:
+                    f1.append(metrics.f1_score(y_test, y_pred, average='macro'))
                     acc.append(metrics.accuracy_score(y_test, y_pred))
+                    pre.append(metrics.precision_score(y_test, y_pred, average='macro', labels=np.unique(y_pred)))
+                    recall.append(metrics.recall_score(y_test, y_pred, average='macro'))
+                    roc.append(metrics.roc_auc_score(y_test, y_proba, multi_class='ovo')) 
                 else:
                     f1.append(metrics.f1_score(y_test, y_pred))
                     acc.append(metrics.accuracy_score(y_test, y_pred))
@@ -128,7 +132,7 @@ def plot_stepwise_accuracy(df, ranking_df, step_num, model, accuracy_metric, mul
                     aic.append(2*metrics.log_loss(y_test, y_proba) + 2*num)
                     bic.append(2*metrics.log_loss(y_test, y_proba) + np.log(x_test.shape[0])*num)   
                 if multi_class == True:
-                    mean_list, cols = [np.mean(acc)], ['accuracy']
+                    mean_list, cols = [np.mean(f1), np.mean(acc), np.mean(pre), np.mean(recall), np.mean(roc)], ['f1', 'accuracy', 'precision', 'recall', 'roc']
                 else:
                     mean_list, cols = [np.mean(f1), np.mean(acc), np.mean(pre), np.mean(recall), np.mean(roc), np.mean(aic), np.mean(bic)], ['f1', 'accuracy', 'precision', 'recall', 'roc', 'aic', 'bic']
             score_step = pd.DataFrame([mean_list], columns=cols)     
