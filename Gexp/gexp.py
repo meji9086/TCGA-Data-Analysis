@@ -63,6 +63,7 @@ def download_data(cancer_list, data_source, data_dir=None):
                             
             except:
                 time.sleep(1)    
+            print(f'The {cancer} is downloaded successfully')
 
 
 def load_labeled_data(data_dir, label_list, patient_type='./BRCApatients_type.csv'):
