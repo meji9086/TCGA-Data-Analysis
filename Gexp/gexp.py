@@ -179,57 +179,77 @@ def biomarker_rank(data, models):
 
     return ranking_df, importance_df
 
-def plot_stepwise_accuracy(df, ranking_df, step_num, model, accuracy_metric):
-    model, model_name = parameter_model(model)
-
+def plot_stepwise_accuracy(df, ranking_df, step_num, model, accuracy_metric, multi_class=None):
+    # top biomaker step
     score_df = pd.DataFrame() 
     methods = ranking_df.columns
-    step_df = pd.DataFrame()
+
     for method in methods:
+        # model parameter 
+        model_params, model_name = parameter_model([model])
+        model_final = model_params.pop() 
+        model_name = model_name.pop()
+        # step wise
         step_df = pd.DataFrame()
         for num in step_num:
             top_marker = ranking_df.sort_values(by = method).iloc[:num].index
+            # Train, test set split
             feature = df.loc[:, top_marker]
             target = df.iloc[:,-1]
-            x_train, x_test, y_train, y_test = train_test_split(feature, target, test_size=0.2, stratify=target, random_state=20) #class 비율 유지
-            model.fit(x_train, y_train)
-            y_pred = model.predict(x_test)
-
-            score_list = []
-            for idx, metric in enumerate(accuracy_metric):
-                if metric == 'f1':
-                    score = metrics.f1_score(y_test, y_pred)
-                elif metric == 'accuracy':
-                    score = metrics.accuracy_score(y_test, y_pred)
-                elif metric == 'precision':
-                    score = metrics.precision_score(y_test, y_pred)
-                elif metric == 'recall':
-                    score = metrics.recall_score(y_test, y_pred)
-                elif metric == 'roc':
-                    score = metrics.roc_auc_score(y_test, y_pred)
-                score_list.append(score)
-            data = pd.DataFrame([score_list], columns = [f'{method}_{i}' for i in accuracy_metric])
-            step_df = pd.concat([step_df, data])
+            # accuracy_metric
+            f1, acc, pre, recall, roc, aic, bic = [], [], [], [], [], [], []
+            # Stratified-5Fold Training
+            skf = StratifiedKFold(n_splits = 5)
+            for train_idx, test_idx, in skf.split(feature, target):
+                x_train, x_test = feature.iloc[train_idx], feature.iloc[test_idx]
+                y_train, y_test = target.iloc[train_idx], target.iloc[test_idx]
+                model_final.fit(x_train, y_train)
+                # test predict
+                y_pred = model_final.predict(x_test)
+                y_proba = model_final.predict_proba(x_test)
+                # accuracy_metric
+                if multi_class == True:
+                    f1.append(metrics.f1_score(y_test, y_pred, average='macro'))
+                    acc.append(metrics.accuracy_score(y_test, y_pred))
+                    pre.append(metrics.precision_score(y_test, y_pred, average='macro', labels=np.unique(y_pred)))
+                    recall.append(metrics.recall_score(y_test, y_pred, average='macro'))
+                    roc.append(metrics.roc_auc_score(y_test, y_proba, multi_class='ovo')) 
+                else:
+                    f1.append(metrics.f1_score(y_test, y_pred))
+                    acc.append(metrics.accuracy_score(y_test, y_pred))
+                    pre.append(metrics.precision_score(y_test, y_pred))
+                    recall.append(metrics.recall_score(y_test, y_pred))
+                    roc.append(metrics.roc_auc_score(y_test, y_pred))
+                    aic.append(2*metrics.log_loss(y_test, y_proba) + 2*num)
+                    bic.append(2*metrics.log_loss(y_test, y_proba) + np.log(x_test.shape[0])*num)   
+                if multi_class == True:
+                    mean_list, cols = [np.mean(f1), np.mean(acc), np.mean(pre), np.mean(recall), np.mean(roc)], ['f1', 'accuracy', 'precision', 'recall', 'roc']
+                else:
+                    mean_list, cols = [np.mean(f1), np.mean(acc), np.mean(pre), np.mean(recall), np.mean(roc), np.mean(aic), np.mean(bic)], ['f1', 'accuracy', 'precision', 'recall', 'roc', 'aic', 'bic']
+            score_step = pd.DataFrame([mean_list], columns=cols)     
+            step_df = pd.concat([step_df, score_step[accuracy_metric]])
+        step_df.columns  = [f'{method}_{i}' for i in accuracy_metric]
         score_df = pd.concat([score_df, step_df], axis=1)
     score_df = score_df.set_index(pd.Index(step_num))
-
-    for score in accuracy_metric:
-        fig , ax = plt.subplots(figsize=(15,5))
-        data = score_df[[i for i in score_df.columns if score in i]]
-        plt.suptitle(f"{model_name} TopMaker {score}", fontsize=15)
-        ax.set_ylim([data.iloc[:,:].min().min() - 0.03 , data.iloc[:,:].max().max() + 0.03])
-        ax.set_ylabel(f'{score}', fontsize=12)
-        ax.set_xlabel('Step', fontsize=12)
+    # plot
+    fig = plt.figure(figsize=(20,4*len(accuracy_metric)))
+    plt.suptitle(f"Accuracy by step using {model_name} model", fontsize=30, position = (0.5, 0.95))
+    for idx, score in enumerate(accuracy_metric):
+        axes = fig.add_subplot(len(accuracy_metric), 1, idx+1)
         for idx, method in enumerate(methods):
-            ax.plot(step_num, data.iloc[:,idx],label = f'{method}')
-            max_idx = data[data.iloc[:,idx] == data.iloc[:,idx].max()].index
+            data = score_df[[i for i in score_df.columns if score in i]]
+            axes.plot(step_num, data.loc[:,f'{method}_{score}'],label = f'{method}', color = sns.color_palette('hsv', len(methods))[idx])
+            axes.set_xlabel('Step', fontsize=14)
+            axes.set_ylabel(f'{score}', fontsize=20)
+            # high accuracy
+            max_idx = data[data.loc[:,f'{method}_{score}'] == data.loc[:,f'{method}_{score}'].max()].index
             for i in list(max_idx):
                 x = i
                 y = data.loc[i, f'{method}_{score}']
-                ax.text(x, y+0.001, f'Step: {x}\n {np.round(y,3)}', horizontalalignment='center', verticalalignment='bottom')
-            ax.scatter(x, y, color='red')
+                axes.text(x, y-0.001, f'Step: {x}\n {np.round(y,3)}', horizontalalignment='center', verticalalignment='top')
+                axes.scatter(x, y, color='red')
             plt.legend(loc='lower right')
-        plt.show()
+    plt.show()
     return score_df
 
 
