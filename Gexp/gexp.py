@@ -15,7 +15,7 @@ from xgboost import XGBClassifier
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import StratifiedKFold
 
-def download_data(cancer_list, data_source, data_dir=None):
+def download_data(cancer_list, data_source='./cancer_link.csv', data_dir=None):
     current_path = os.getcwd()
     if data_dir is None:
         path = current_path
@@ -65,8 +65,7 @@ def download_data(cancer_list, data_source, data_dir=None):
                 time.sleep(1)    
             print(f'The {cancer} is downloaded successfully')
 
-
-def load_labeled_data(data_dir, label_list, patient_type='./BRCApatients_type.csv'):
+def load_labeled_data(data_dir, label_list, patient_type=None):
     # file list
     file_list = [f for f in os.listdir(data_dir) if f != '.ipynb_checkpoints']
     cancer_df = pd.DataFrame()
@@ -93,7 +92,6 @@ def load_labeled_data(data_dir, label_list, patient_type='./BRCApatients_type.cs
         print(f'load file : {cancer_txt}')
         
     return cancer_df
-
 
 def parameter_model(model_param=None):
     model_final = [] 
@@ -165,7 +163,7 @@ def parameter_model(model_param=None):
 
     return model_final, model_name
 
-def biomarker_rank(data, models, test_size=None):
+def biomarker_rank(data, models=[['RF','recommended']], test_size=0.2):
     model_final, model_name = parameter_model(models)
 
     X_features = data.iloc[:, :-1]
@@ -188,7 +186,7 @@ def biomarker_rank(data, models, test_size=None):
 
     return ranking_df, importance_df
 
-def plot_stepwise_accuracy(df, ranking_df, step_num, model, accuracy_metric, multi_class=None):
+def plot_stepwise_accuracy(df, ranking_df, step_num, model=['RF','recommended'], accuracy_metric=['accuracy'], multi_class=None):
     # top biomaker step
     score_df = pd.DataFrame() 
     methods = ranking_df.columns
@@ -261,7 +259,7 @@ def plot_stepwise_accuracy(df, ranking_df, step_num, model, accuracy_metric, mul
     plt.show()
     return score_df
 
-def normalize(df, methods, exclude):
+def normalize(df, methods=['log1p', 'z_score'], exclude='Target'):
     normalize_df = df.copy()
     normalize_df.drop(columns = exclude, inplace=True)
 
@@ -280,7 +278,7 @@ def normalize(df, methods, exclude):
     normalize_df = pd.concat([normalize_df, df[[exclude]]], axis=1)
     return normalize_df
 
-def plot_heatmap(df, gene_list):
+def plot_heatmap(df, gene_list, vmin=-2, vmax=2):
     
     cancer_list = list(df['Target'])
     ind = sorted(np.unique(cancer_list, return_index=True)[1])
@@ -295,8 +293,8 @@ def plot_heatmap(df, gene_list):
                   cmap = 'RdBu_r',
                   cbar_kws = {"shrink": .8},
                   center = 0.0,
-                  vmin = -2,
-                  vmax = 2,
+                  vmin = vmin,
+                  vmax = vmax,
                   linewidths=0,
                   xticklabels=False,
                   cbar_pos=(1, .015, .04, .75),
