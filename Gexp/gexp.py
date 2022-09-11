@@ -1,19 +1,99 @@
-import requests
 import os
-import shutil
-import pandas as pd
-import numpy as np
-import tarfile
+import pip
 import time
-import seaborn as sns
-import matplotlib.pyplot as plt 
-from sklearn import metrics
-from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, ExtraTreesClassifier
-from sklearn.tree import DecisionTreeClassifier
-from xgboost import XGBClassifier
-from sklearn.neural_network import MLPClassifier
-from sklearn.model_selection import StratifiedKFold
+import numpy as np
+import gzip
+from IPython.display import HTML
+
+try:
+    import requests
+except ImportError:
+    pget_ipython().system('pip install requests')
+finally:
+    import requests
+
+try:
+    import pandas
+except ImportError:
+    get_ipython().system('pip install pandas')
+finally:
+    import pandas
+
+try:
+    import shutil
+except ImportError:
+    get_ipython().system('pip install shutil')
+finally:
+    import shutil
+
+try:
+    import tarfile
+except ImportError:
+    get_ipython().system('pip install tarfile')
+finally:
+    import tarfile
+
+try:
+    import seaborn as sns
+except ImportError:
+    get_ipython().system('pip install seaborn')
+finally:
+    import seaborn as sns
+
+try:
+    import matplotlib.pyplot as plt 
+except ImportError:
+    get_ipython().system('pip install matplotlib')
+finally:
+    import matplotlib.pyplot as plt 
+    
+try:
+    from sklearn import metrics
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, ExtraTreesClassifier
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.model_selection import StratifiedKFold
+except ImportError:
+    get_ipython().system('pip install sklearn')
+finally:
+    from sklearn import metrics
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier, ExtraTreesClassifier
+    from sklearn.tree import DecisionTreeClassifier
+    from sklearn.neural_network import MLPClassifier
+    from sklearn.model_selection import StratifiedKFold
+
+try:
+    from xgboost import XGBClassifier
+except ImportError:
+    get_ipython().system('pip install xgboost')
+finally:
+    from xgboost import XGBClassifier
+    
+def download_metadata(metadata_dir='./Metadata/'):
+    url = 'https://ftp.ncbi.nlm.nih.gov/gene/DATA/GENE_INFO/Mammalia/Homo_sapiens.gene_info.gz'
+    file_name = url.split('/')[-1]
+    with open(file_name, "wb") as file:
+        response = requests.get(url)               
+        file.write(response.content)
+    while True:
+        try:
+            if file_name in os.listdir(os.getcwd()):
+                os.makedirs(metadata_dir)
+                shutil.move(file_name, f'{metadata_dir}{file_name}')
+                break
+        except:
+            pass
+    f = gzip.open(f'{metadata_dir}{file_name}', 'rb')
+    file_content = f.read()
+    with open(f"{metadata_dir}{os.path.splitext(file_name)[0]}", "wb") as f:
+        f.write(file_content)
+        f.close()
+    os.remove(f'{metadata_dir}{file_name}')
+    
+# Metadata download
+download_metadata()    
 
 def download_data(cancer_list, data_source='./cancer_link.csv', data_dir=None):
     current_path = os.getcwd()
@@ -277,6 +357,25 @@ def normalize(df, methods=['log1p', 'z_score'], exclude='Target'):
                     normalize_df.loc[:,col] = (normalize_df.loc[:,col] - m)/s  
     normalize_df = pd.concat([normalize_df, df[[exclude]]], axis=1)
     return normalize_df
+
+def describe_genes(gene_list, gene_description='./Metadata/Homo_sapiens.gene_info'):
+    df = pd.read_csv(gene_description, sep='\t')
+    df = df[['GeneID', 'Symbol', 'type_of_gene', 'map_location', 'description']]
+    
+    df2 = pd.DataFrame(data=None, columns=df.columns)
+    for gene in gene_list:
+        gsymbol, gid = gene.split('|')[0], int(gene.split('|')[1])
+        if sum(df['GeneID'] == gid) == 1:
+            df2 = pd.concat([df2,df.loc[df['GeneID'] == gid]], ignore_index=True)
+        elif sum(df['Symbol'] == gsymbol) == 1:
+            df2 = pd.concat([df2,df.loc[df['Symbol'] == gsymbol]], ignore_index=True)
+        else:
+            df2 = df2.append({'GeneID': gid, 'Symbol': gsymbol, 'type_of_gene': None, 'map_location': None, 'description': None}, ignore_index=True)
+
+    df2['links']= 'https://www.genecards.org/cgi-bin/carddisp.pl?gene='+df2['GeneID'].astype(str)
+    df2 = HTML(df2.to_html(render_links=True, escape=False))
+    
+    return df2
 
 def plot_heatmap(df, gene_list, vmin=-2, vmax=2):
     
