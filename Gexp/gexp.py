@@ -263,6 +263,9 @@ def biomarker_rank(data, models=[['RF','recommended']], test_size=0.2):
         ranking[f'{method_name}'] = importance_df[f'{method_name}'].rank(method='min', ascending=False)
         ranking = ranking[[f'{method_name}']].astype('int')
         ranking_df = pd.concat([ranking_df, ranking], axis=1)
+        
+    ranking_df = ranking_df.sort_values(by=model_name[0], ascending=True)
+    importance_df = importance_df.sort_values(by=model_name[0], ascending=False)
 
     return ranking_df, importance_df
 
