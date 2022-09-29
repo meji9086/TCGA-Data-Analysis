@@ -14,6 +14,6 @@
 |<span style="color:blue">[이선우](https://github.com/susan8653)</span>|Data download and extract file Using Web Crawling|
 |<span style="color:blue">[강서연](https://github.com/Kangseoyeon512)</span>|Data Visualization Using Heatmap and clustering|
 
-## <img scr="https://user-images.githubusercontent.com/72390138/192966534-f1ea7c7b-21b2-4a29-8aaf-dff1785df86e.png" width="50" height="50"/> Awarding
-우수상 수상
+## Awarding
+<img scr="https://user-images.githubusercontent.com/72390138/192966534-f1ea7c7b-21b2-4a29-8aaf-dff1785df86e.png" width="50" height="50"/> 우수상 수상
 ![공모전 수상](https://user-images.githubusercontent.com/72390138/192967381-f2628853-8427-4dc5-a370-bd51483b04de.jpg)
