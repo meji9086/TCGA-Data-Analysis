@@ -11,5 +11,9 @@
 |:------:|:---:|
 |<span style="color:blue">[김예지](https://github.com/meji9086)</span>|Measurement of Ranking and Feature Importance Using Modeling|
 |<span style="color:blue">[한채은](https://github.com/Hanchaeeun)</span>|Measure and Compare Accuracy Using Modeling and Visualization|
-|<span style="color:blue">[이선우](https://github.com/susan8653)</span>|Web Crawling & Data Visualization Using Heatmap|
-|<span style="color:blue">[강서연](https://github.com/Kangseoyeon512)</span>|Web Crawling & Data Visualization Using Heatmap|
+|<span style="color:blue">[이선우](https://github.com/susan8653)</span>|Data download and extract file Using Web Crawling|
+|<span style="color:blue">[강서연](https://github.com/Kangseoyeon512)</span>|Data Visualization Using Heatmap and clustering|
+
+## Awarding ![image](https://user-images.githubusercontent.com/72390138/192966534-f1ea7c7b-21b2-4a29-8aaf-dff1785df86e.png)
+우수상 수상
+![공모전 수상](https://user-images.githubusercontent.com/72390138/192966622-a9a7122f-10f7-42f4-bd22-07e18283542f.jpg)
