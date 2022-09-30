@@ -44,7 +44,7 @@ Optional Argument
  --data_source
 ```
 
-Result
+Result    
 ![image](https://user-images.githubusercontent.com/72390138/193192743-18743150-b79d-4e2b-b596-4be2f0c7353e.png)
 
 
@@ -59,7 +59,19 @@ Optional Argument
  --patient_type
 ```
 
-Result
+Result     
 ![image](https://user-images.githubusercontent.com/72390138/193194937-e3b7265a-dab0-407c-bf9d-f2e3640ca11f.png)
 
 
+### biomarker_rank.py
+Argument
+```
+Measure and rank feature importance by model(RandomForest, EXtraTrees, XGBoost, AdaBoost, DecisionTree)
+
+Optional Argument
+ --cancer_df
+ --models
+```
+
+Result    
+![image](https://user-images.githubusercontent.com/72390138/193195332-c3c8e832-74fb-4f09-b9d9-17202a5739f1.png)
