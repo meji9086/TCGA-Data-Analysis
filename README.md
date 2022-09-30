@@ -72,7 +72,7 @@ Optional Argument
 ```
 
 Example           
-<img src="https://user-images.githubusercontent.com/72390138/193202486-87fa3ae6-1e3d-4049-b00f-c3243f1633ca.png"  width="500" height="500"/>
+<img src="https://user-images.githubusercontent.com/72390138/193202486-87fa3ae6-1e3d-4049-b00f-c3243f1633ca.png"  width="400" height="400"/>
 
 
 ### plot_stepwise_accuracy.py
@@ -119,4 +119,4 @@ Oprional Arguement
 ```
 
 Example            
-<img src="https://user-images.githubusercontent.com/72390138/193202285-8e3ae4a2-4477-4901-b352-f9bbc4c3eb03.png"  width="800" height="800"/>
+<img src="https://user-images.githubusercontent.com/72390138/193202285-8e3ae4a2-4477-4901-b352-f9bbc4c3eb03.png"  width="600" height="600"/>
