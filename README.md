@@ -4,7 +4,7 @@
 
  대회 URL : http://dataon-con.kr/pages/about_new.php
  
- 주제 : Gexp : TCGA 유전자 발현 데이터에서 머신러닝적 마커 유전자 검출 방법을 비교하는 원샷 소프트웨어
+ 주제 - Gexp : Genemarker Expert 머신러닝 기반 멀티 클래스 분석 바이오 마커 탐지 소프트웨어 
 
 ## 👩‍👩‍👧‍👧 Team Info.
 |이름|역할|
