@@ -36,7 +36,6 @@ gexp
 
 
 ### download_cancer.py
-Argument
 ```
 Download cancer data (mRNAseq) from the firebrowse site(http://firebrowse.org/)
 
@@ -50,7 +49,6 @@ Result
 
 
 ### load_labeled_data.py
-Argument
 ```
 Create a Target variable as part of the preprocessing process
 
@@ -65,7 +63,6 @@ Result
 
 
 ### biomarker_rank.py
-Argument
 ```
 Measure and rank feature importance by model(RandomForest, EXtraTrees, XGBoost, AdaBoost, DecisionTree)
 
