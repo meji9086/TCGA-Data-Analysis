@@ -37,7 +37,7 @@ gexp
 
 ### download_cancer.py
 ```
-Download cancer data (mRNAseq) from the firebrowse site([firebrowse][http://firebrowse.org/])
+Download cancer data (mRNAseq) from the firebrowse site(<http://firebrowse.org/>)
 
 Optional Argument
  --cancer_list
