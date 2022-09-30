@@ -119,4 +119,4 @@ Oprional Arguement
 ```
 
 Example            
-<img src="https://user-images.githubusercontent.com/72390138/193202285-8e3ae4a2-4477-4901-b352-f9bbc4c3eb03.png"  width="600" height="600"/>
+<img src="https://user-images.githubusercontent.com/72390138/193202285-8e3ae4a2-4477-4901-b352-f9bbc4c3eb03.png"  width="800" height="600"/>
