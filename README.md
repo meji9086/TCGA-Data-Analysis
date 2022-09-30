@@ -44,7 +44,7 @@ Optional Argument
  --data_source
 ```
 
-Result    
+Example
 ![image](https://user-images.githubusercontent.com/72390138/193192743-18743150-b79d-4e2b-b596-4be2f0c7353e.png)
 
 
@@ -58,8 +58,8 @@ Optional Argument
  --patient_type
 ```
 
-Result     
-<img src="https://user-images.githubusercontent.com/72390138/193194937-e3b7265a-dab0-407c-bf9d-f2e3640ca11f.png"  width="800" height="400"/>
+Example  
+<img src="https://user-images.githubusercontent.com/72390138/193194937-e3b7265a-dab0-407c-bf9d-f2e3640ca11f.png"  width="800" height="350"/>
 
 
 ### biomarker_rank.py
@@ -71,5 +71,52 @@ Optional Argument
  --models
 ```
 
-Result    
+Example   
 <img src="https://user-images.githubusercontent.com/72390138/193195332-c3c8e832-74fb-4f09-b9d9-17202a5739f1.png"  width="800" height="400"/>
+
+
+### plot_stepwise_accuracy.py
+```
+Visualization of accuracy by step and model(RandomForest, MLP)
+
+Optional Argument
+ --cancer_df    
+ --ranking_df     
+ --model     
+ --step_num    
+ --metric     
+ --multi_class    
+```
+
+Example
+<img src="https://user-images.githubusercontent.com/72390138/193201351-f6a51d04-3f0c-4fc1-84ca-81ca22f5055a.png"  width="900" height="500"/>
+
+
+### describe_genes.py      
+```
+As a result of performance evaluation, gene information can be viewed as many as the number of genes in the high-performance model
+
+Optional Argument          
+ --score_df       
+ --ranking_df        
+ --gene_descrip       
+```
+
+Example
+<img src="https://user-images.githubusercontent.com/72390138/193201778-e59e9ed5-2a52-4dd9-b4c7-1e3af6d64f08.png"  width="800" height="400"/>
+
+
+### plot_heatmap.py
+```
+Visualization with clustermap as normalized data for top N biomarker genes
+
+Oprional Arguement
+ --cancer_df       
+ --ranking_df    
+ --topN       
+ --vmin      
+ --vmax      
+```
+
+Example
+<img src="https://user-images.githubusercontent.com/72390138/193202285-8e3ae4a2-4477-4901-b352-f9bbc4c3eb03.png"  width="800" height="800"/>
