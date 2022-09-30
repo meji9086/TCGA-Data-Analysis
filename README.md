@@ -110,7 +110,7 @@ Example
 ```
 Visualization with clustermap as normalized data for top N biomarker genes
 
-Oprional Arguement
+Optional Arguement
  --cancer_df       
  --ranking_df    
  --topN       
