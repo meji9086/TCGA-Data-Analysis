@@ -60,7 +60,7 @@ Optional Argument
 ```
 
 Result     
-<img src="https://user-images.githubusercontent.com/72390138/193194937-e3b7265a-dab0-407c-bf9d-f2e3640ca11f.png"  width="200" height="200"/>
+<img src="https://user-images.githubusercontent.com/72390138/193194937-e3b7265a-dab0-407c-bf9d-f2e3640ca11f.png"  width="400" height="400"/>
 
 
 ### biomarker_rank.py
