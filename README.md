@@ -21,7 +21,8 @@
 
 ## 📋 Pipeline
 ### Scripts
-gexp
+```
+gexp        
 ├── download_cancer.py     
 ├── load_labeled_data.py     
 ├── biomarker_rank.py       
@@ -29,3 +30,4 @@ gexp
 ├── normalize.py        
 ├── plot_heatmap.py        
 └──            
+```
