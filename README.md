@@ -14,7 +14,18 @@
 |<span style="color:blue">[이선우](https://github.com/susan8653)</span>|Data download and extract file Using Web Crawling|
 |<span style="color:blue">[강서연](https://github.com/Kangseoyeon512)</span>|Data Visualization Using Heatmap and clustering|
 
-## Awarding
-🏆 우수상 수상 🏆
+## 🏆 Awarding
+🎉 우수상 수상 🎉 
 
 ![공모전 수상](https://user-images.githubusercontent.com/72390138/192967381-f2628853-8427-4dc5-a370-bd51483b04de.jpg)
+
+## 📋 Pipeline
+Scripts
+gexp
+├── download.py
+├── load_data.py
+├── biomarker_rank.py
+├── plot_accuracy.py
+├── normalize.py
+├── heatmap.py
+└── 
