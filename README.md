@@ -17,7 +17,7 @@
 ## 🏆 Awarding
 🎉 우수상 수상 🎉 
 
-<img src="https://user-images.githubusercontent.com/72390138/192967381-f2628853-8427-4dc5-a370-bd51483b04de.jpg"  width="800" height="800"/>
+<img src="https://user-images.githubusercontent.com/72390138/192967381-f2628853-8427-4dc5-a370-bd51483b04de.jpg"  width="1200" height="800"/>
 
 ## 📋 Pipeline
 ### Scripts
