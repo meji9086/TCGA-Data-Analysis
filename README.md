@@ -21,11 +21,12 @@
 
 ## 📋 Pipeline
 ### Scripts
-### gexp
-├── download.py
-├── load_data.py
-├── biomarker_rank.py
-├── plot_accuracy.py
-├── normalize.py
-├── heatmap.py
-└── 
+#### gexp
+#### ├── download_cancer.py
+#### ├── load_labeled_data.py
+#### ├── biomarker_rank.py
+#### ├── plot_stepwise_accuracy.py
+#### ├── describe_genes.py
+#### ├── normalize.py
+#### ├── plot_heatmap.py
+#### └── 
