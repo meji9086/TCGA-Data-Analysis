@@ -26,8 +26,40 @@ gexp
 ├── download_cancer.py     
 ├── load_labeled_data.py     
 ├── biomarker_rank.py       
-├── plot_stepwise_accuracy.py      
+├── plot_stepwise_accuracy.py     
+├── describe_genes.py
 ├── normalize.py        
 ├── plot_heatmap.py        
 └──            
 ```
+
+
+### download_cancer.py
+Argument
+```
+Download cancer data (mRNAseq) from the firebrowse site(http://firebrowse.org/)
+
+Optional Argument
+ --cancer_list
+ --data_source
+```
+
+Result
+![image](https://user-images.githubusercontent.com/72390138/193192743-18743150-b79d-4e2b-b596-4be2f0c7353e.png)
+
+
+### load_labeled_data.py
+Argument
+```
+Create a Target variable as part of the preprocessing process
+
+Optional Argument
+ --data_dir
+ --label_list
+ --patient_type
+```
+
+Result
+![image](https://user-images.githubusercontent.com/72390138/193194937-e3b7265a-dab0-407c-bf9d-f2e3640ca11f.png)
+
+
