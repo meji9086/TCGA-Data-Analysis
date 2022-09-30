@@ -72,7 +72,7 @@ Optional Argument
 ```
 
 Example           
-<img src="https://user-images.githubusercontent.com/72390138/193202486-87fa3ae6-1e3d-4049-b00f-c3243f1633ca.png"  width="800" height="800"/>
+<img src="https://user-images.githubusercontent.com/72390138/193202486-87fa3ae6-1e3d-4049-b00f-c3243f1633ca.png"  width="500" height="500"/>
 
 
 ### plot_stepwise_accuracy.py
